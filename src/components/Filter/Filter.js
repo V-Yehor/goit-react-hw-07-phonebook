@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterText } from './Filter.styled';
 import { setStoreFilter } from '../../redux/filterSlice';
+import { selectFilter } from '../../redux/selectors';
 
 export const Filter = () => {
-  const currentFilter = useSelector(state => state.filter);
+  const currentFilter = useSelector(selectFilter);
 
   const dispatch = useDispatch();
 
   const onSetFilter = newSearch => {
-    const action = setStoreFilter(newSearch);
-    dispatch(action);
+    dispatch(setStoreFilter(newSearch));
   };
   return (
     <>

@@ -7,8 +7,9 @@ import {
 } from './ContactForm.styled';
 
 import * as Yup from 'yup';
-import { useSelector, useDispatch } from 'react-redux';
-import { addNewContact } from '../../redux/contactsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from '../../redux/operations';
+import { selectContacts } from '../../redux/selectors';
 
 const contactsSheme = Yup.object().shape({
   name: Yup.string().required('Required'),
@@ -17,18 +18,15 @@ const contactsSheme = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const initialContacts = useSelector(state => state.contacts);
+  const conacts = useSelector(selectContacts);
 
-  const addContact = value => {
-    const hasName = initialContacts.some(
-      contact => contact.name === value.name
-    );
+  const handleSubmit = value => {
+    const hasName = conacts.some(contact => contact.name === value.name);
     if (hasName) {
       alert(`${value.name} is already in contacts.`);
       return;
     } else {
-      const action = addNewContact(value);
-      dispatch(action);
+      dispatch(addContact(value));
     }
   };
 
@@ -40,7 +38,7 @@ export const ContactForm = () => {
       }}
       validationSchema={contactsSheme}
       onSubmit={(values, actions) => {
-        addContact(values);
+        handleSubmit(values);
         actions.resetForm();
       }}
     >
